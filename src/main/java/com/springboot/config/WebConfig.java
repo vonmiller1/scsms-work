@@ -18,8 +18,7 @@ public class WebConfig {
                         .allowedOriginPatterns("http://localhost:3000", "https://scsms.vercel.app") // React application URL
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
-                        .allowCredentials(true)
-                        .exposedHeaders("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"); // add exposed headers
+                        .allowCredentials(true);
             }
             @Override
             public void addResourceHandlers(ResourceHandlerRegistry registry) {
