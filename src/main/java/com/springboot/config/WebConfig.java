@@ -15,11 +15,10 @@ public class WebConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("https://scsms.vercel.app") // React application URL
+                        .allowedOrigins("http://localhost:3000", "https://scsms.vercel.app") // React application URL
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
-                        .allowCredentials(true)
-                        .exposedHeaders("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials");
+                        .allowCredentials(true);
             }
             @Override
             public void addResourceHandlers(ResourceHandlerRegistry registry) {
