@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Transient;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 //import javax.persistence.*;
 
@@ -24,9 +25,11 @@ public class User {
     @Column(unique = true)
     private String username;
     
+    @JsonIgnore
     private String password;
 
     @Transient
+    @JsonIgnore
     private String confirmPassword;
 
     // Getters and Setters
