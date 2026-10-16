@@ -1,13 +1,14 @@
 package com.springboot.controller;
 
 import com.springboot.model.BmcUser;
-import com.springboot.model.User;
 import com.springboot.service.BmcUserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/api/bmc")
@@ -26,21 +27,16 @@ public class BmcAuthController {
     public BmcUser login(@RequestBody BmcUser user, HttpSession session) {
         BmcUser loggedIn = bmcUserService.login(user.getEmail(), user.getPassword());
         if (loggedIn != null) {
-            session.setAttribute("bmc_user", loggedIn); // Save in session
+            session.setAttribute("bmc_user", loggedIn);
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                    loggedIn, null, new ArrayList<>());
+            SecurityContextHolder.getContext().setAuthentication(authToken);
         }
         return loggedIn;
     }
 
     @GetMapping("/session-bmc")
-//    public ResponseEntity<?> getBmcSessionUser(HttpSession session) {
-//        Object bmcUser = session.getAttribute("bmc_user");
-//        if (bmcUser != null) {
-//            return ResponseEntity.ok(bmcUser);
-//        } else {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No BMC user session found");
-//        }
-//    }
     public BmcUser getBmcSessionUser(HttpSession session) {
-        return (BmcUser) session.getAttribute("bmc_user"); // Retrieve session bmc_user
+        return (BmcUser) session.getAttribute("bmc_user");
     }
 }
