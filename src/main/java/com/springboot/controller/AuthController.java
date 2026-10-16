@@ -23,7 +23,8 @@ public class AuthController {
 
     @PostMapping("/signup")
     public User signup(@RequestBody User user) {
-        if (!user.getPassword().equals(user.getConfirmPassword())) {
+        if (user.getPassword() == null || user.getConfirmPassword() == null
+                || !user.getPassword().equals(user.getConfirmPassword())) {
             throw new RuntimeException("Passwords do not match!");
         }
         return userService.register(user);
@@ -57,7 +58,8 @@ public class AuthController {
 
     @PostMapping("/logout")
     public String logout(HttpSession session) {
-        session.invalidate(); // Clear session
+        session.invalidate();
+        SecurityContextHolder.clearContext();
         return "Logged out successfully!";
     }
 }
