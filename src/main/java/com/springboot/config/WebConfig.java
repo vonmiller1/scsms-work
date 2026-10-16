@@ -18,7 +18,8 @@ public class WebConfig {
                         .allowedOrigins("http://localhost:3000", "https://scsms.vercel.app") // React application URL
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
-                        .allowCredentials(true);
+                        .allowCredentials(true)
+                        .maxAge(3600);
             }
             @Override
             public void addResourceHandlers(ResourceHandlerRegistry registry) {
