@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: scsms-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: reportissuedb
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - scsms-net
+
+  backend:
+    image: openjdk:21
+    container_name: scsms-backend
+    volumes:
+      - /home/ec2-user/target/ROOT.jar:/app/ROOT.jar
+      - uploads:/uploads  # ⬅ Stores uploaded images
+    command: ["java", "-jar", "/app/ROOT.jar"]
+    depends_on:
+      - mysql
+    ports:
+      - "8081:8080"  # HostPort:ContainerPort
+    networks:
+      - scsms-net
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://scsms-mysql:3306/reportissuedb
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: password
+
+volumes:
+  mysql_data:
+  uploads:
+
+networks:
+  scsms-net:
