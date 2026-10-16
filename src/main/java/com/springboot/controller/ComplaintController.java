@@ -27,9 +27,16 @@ public class ComplaintController {
                                  @RequestParam(value = "photo", required = false) MultipartFile photo,
                                  @RequestParam(value = "photoUrl", required = false) String photoUrl) throws IOException {
 
+        if (description == null || description.isBlank()) {
+            throw new IllegalArgumentException("Description is required");
+        }
+        if (area == null || area.isBlank()) {
+            throw new IllegalArgumentException("Area is required");
+        }
+
         Complaint complaint = new Complaint();
-        complaint.setDescription(description);
-        complaint.setArea(area);
+        complaint.setDescription(description.trim());
+        complaint.setArea(area.trim());
         complaint.setLatitude(latitude);
         complaint.setLongitude(longitude);
         complaint.setStatus(status);
@@ -37,27 +44,20 @@ public class ComplaintController {
         return complaintService.registerComplaint(complaint, photo, photoUrl);
     }
 
-    // Get all complaints
     @GetMapping
     public List<Complaint> getAllComplaints(HttpSession session) {
-        Object user = session.getAttribute("user");
-        System.out.println("Session user: " + user);
-
-        if (user == null) {
+        if (session.getAttribute("user") == null && session.getAttribute("bmc_user") == null) {
             throw new RuntimeException("User not logged in or session expired.");
         }
 
         return complaintService.getAllComplaints();
     }
 
-
-    // Get a specific complaint by ID
     @GetMapping("/{id}")
     public Complaint getComplaint(@PathVariable Long id) {
         return complaintService.getComplaintById(id);
     }
 
-    // Update complaint status by ID
     @PutMapping("/{id}")
     public Complaint updateComplaintStatus(@PathVariable Long id, @RequestBody Complaint complaint) {
         return complaintService.updateComplaintStatus(id, complaint);
