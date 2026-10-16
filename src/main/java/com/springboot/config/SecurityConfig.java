@@ -1,5 +1,6 @@
 package com.springboot.config;
 
+import com.springboot.model.BmcUser;
 import com.springboot.model.User;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -11,6 +12,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -22,7 +25,11 @@ import java.util.Collections;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    // Inline filter that checks session and sets authentication
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
     public class SessionAuthFilter extends OncePerRequestFilter {
         @Override
         protected void doFilterInternal(HttpServletRequest request,
@@ -34,10 +41,15 @@ public class SecurityConfig {
 
             if (session != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 User user = (User) session.getAttribute("user");
+                BmcUser bmcUser = (BmcUser) session.getAttribute("bmc_user");
 
                 if (user != null) {
                     UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
                             user, null, Collections.emptyList());
+                    SecurityContextHolder.getContext().setAuthentication(auth);
+                } else if (bmcUser != null) {
+                    UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
+                            bmcUser, null, Collections.emptyList());
                     SecurityContextHolder.getContext().setAuthentication(auth);
                 }
             }
@@ -50,19 +62,27 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(org.springframework.security.config.annotation.web.builders.HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> {}) // Enables CORS config from WebMvcConfigurer
+                .cors(cors -> {})
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**", "/css/**", "/js/**").permitAll() //Allow login/signup routes
-                        .requestMatchers("/api/bmc/login", "/api/bmc/signup").permitAll() // Allow BMC login/signup
-                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll() // CORS preflight
-                        .requestMatchers("/api/**").authenticated() // allow API for logged-in users
+                        .requestMatchers("/health").permitAll()
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/v2/api-docs",
+                                "/v3/api-docs/**",
+                                "/swagger-resources/**",
+                                "/webjars/**"
+                        ).permitAll()
+                        .requestMatchers("/api/auth/**", "/css/**", "/js/**").permitAll()
+                        .requestMatchers("/api/bmc/login", "/api/bmc/signup").permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers("/api/**").authenticated()
                         .anyRequest().authenticated()
                 )
-                .formLogin(form -> form.disable()) // Disable Spring's default form login
-                .httpBasic(basic -> basic.disable()) // Disable HTTP basic auth
-                .logout(logout -> logout.disable()); // Disable Spring logout (Optional)
+                .formLogin(form -> form.disable())
+                .httpBasic(basic -> basic.disable())
+                .logout(logout -> logout.disable());
 
-        // Add the session filter BEFORE UsernamePasswordAuthenticationFilter
         http.addFilterBefore(new SessionAuthFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
