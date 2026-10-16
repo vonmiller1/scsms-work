@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class BmcUser {
@@ -24,6 +25,7 @@ public class BmcUser {
     @Column(unique = true)
     private String email;
     
+    @JsonIgnore
     private String password;
 
     // Getters and Setters
