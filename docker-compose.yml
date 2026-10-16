@@ -18,8 +18,8 @@ services:
     image: openjdk:21
     container_name: scsms-backend
     volumes:
-      - /home/ec2-user/target/ROOT.jar:/app/ROOT.jar
-      - uploads:/uploads  # ⬅ Stores uploaded images
+      - ./target/ROOT.jar:/app/ROOT.jar
+      - uploads:/uploads  # Stores uploaded images
     command: ["java", "-jar", "/app/ROOT.jar"]
     depends_on:
       - mysql
