@@ -19,16 +19,16 @@ public class SwaggerConfig implements WebMvcConfigurer {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2).select()
-                .apis(RequestHandlerSelectors.basePackage("com.springboot.config"))
-                .paths(PathSelectors.regex("/.*"))
+                .apis(RequestHandlerSelectors.basePackage("com.springboot.controller"))
+                .paths(PathSelectors.ant("/api/**"))
                 .build().apiInfo(apiInfoMetaData());
     }
 
     private ApiInfo apiInfoMetaData() {
 
         return new ApiInfoBuilder().title("SCSMS")
-                .description("SCSMS API Testing")
-                .contact(new Contact("Dev-Team", "https://www.dev-team.com/", "dev-team@gmail.com"))
+                .description("Smart Cleanliness and Sanitation Management System REST API")
+                .contact(new Contact("Dev-Team", "https://github.com/vonmiller1/scsms-work", ""))
                 .license("Apache 2.0")
                 .licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html")
                 .version("1.0.0")
