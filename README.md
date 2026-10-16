@@ -34,12 +34,6 @@
 
 ---
 
-## 🚀 Live Demo
-
-Check out the live app here 👉 [scsms.vercel.app](https://scsms.vercel.app)
-
----
-
 ## 🎯 **Future Enhancements**
 
 - 📡 **AI-Based Image Validation**
@@ -55,24 +49,9 @@ Check out the live app here 👉 [scsms.vercel.app](https://scsms.vercel.app)
 
 ```sh
 # Clone the repository
-git clone https://github.com/gniraj1432/scsms-backend.git
-cd scsms-backend
-```
-
-### **Clone Frontend Repository if Needed**
-
-```sh
-# Clone the repository
 git clone https://github.com/gniraj1432/scsms.git
 cd scsms
 ```
-
-## **Setup Instructions for Frontend**
-
-1. Clone the repo
-2. Run `npm install`
-3. Set up `.env` files
-4. Run with `npm run dev`
 
 ---
 
@@ -86,7 +65,7 @@ Make sure nothing is running on **port 8082** in the background. If something is
 
 ```sh
 # Navigate to the Java application directory
-cd scsms-backend/src/main/java/com/springboot/application
+cd scsms/src/main/java/com/springboot/application
 
 # Run the Spring Boot application
 mvn clean install
@@ -130,12 +109,6 @@ npm start
 ```sh
 mvn clean install
 java -jar target/*.jar
-```
-
-### **If You Want to Build Without Running Test**
-
-```sh
-mvn clean install -DskipTests
 ```
 
 ### **Frontend Deployment**
