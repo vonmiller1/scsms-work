@@ -9,4 +9,8 @@ import java.util.Optional;
 @Repository
 public interface BmcUserRepository extends JpaRepository<BmcUser, Long> {
     Optional<BmcUser> findByEmail(String email);
+
+    boolean existsByEmail(String email);
+
+    boolean existsByBmcId(String bmcId);
 }
