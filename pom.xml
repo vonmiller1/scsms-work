@@ -12,7 +12,8 @@
 	<artifactId>scsms</artifactId>
 	<!-- Default Packaging Type -->
 	<!-- <packaging>war</packaging> -->
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version> <!-- changed version to 1.0.0 to avoid SNAPSHOT in filename -->
+	<!-- <packaging>jar</packaging> --> <!-- explicitly set packaging type to jar -->
 	<name>scsms</name>
 	<description>Java Springboot SCSMS Project</description>
 	<url/>
@@ -73,13 +74,12 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
-
+		
 		<!-- JWT Dependencies -->
         <!-- <dependency>
             <groupId>io.jsonwebtoken</groupId>
@@ -119,43 +119,40 @@
 	</dependencies>
 
 	<build>
-		<plugins>
-			<!-- Spring Boot Plugin to Package as JAR -->
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                        <configuration>
-                            <classifier>jar</classifier>
-                        </configuration>
-                    </execution>
-                </executions>
-			</plugin>
-			
-			<!-- Maven Assembly Plugin to Generate Both JAR and WAR -->
-            <!-- <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>make-jar</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                        <configuration>
-                            <descriptors>
-                                <descriptor>src/assembly/jar.xml</descriptor>
-                            </descriptors>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin> -->
-		</plugins>
+	    <plugins>
+	
+	        <!-- Spring Boot Plugin to Package JAR -->
+	        <plugin>
+	            <groupId>org.springframework.boot</groupId>
+	            <artifactId>spring-boot-maven-plugin</artifactId>
+	            <executions>
+	                <execution>
+	                    <id>repackage-jar</id> <!-- Added ID for JAR -->
+	                    <phase>package</phase>
+	                    <goals>
+	                        <goal>repackage</goal>
+	                    </goals>
+	                </execution>
+	            </executions>
+	        </plugin>
+	
+	        <!-- Maven WAR Plugin to Create WAR -->
+	        <plugin>
+	            <groupId>org.apache.maven.plugins</groupId>
+	            <artifactId>maven-war-plugin</artifactId>
+	            <version>3.3.2</version> <!-- Use latest version -->
+	            <executions>
+	                <execution>
+	                    <id>make-war</id> <!-- Added ID for WAR -->
+	                    <phase>package</phase>
+	                    <goals>
+	                        <goal>war</goal>
+	                    </goals>
+	                </execution>
+	            </executions>
+	        </plugin>
+	
+	    </plugins>
 	</build>
 
 </project>
