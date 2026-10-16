@@ -51,13 +51,6 @@ Check out the live app here 👉 [scsms.vercel.app](https://scsms.vercel.app)
 
 ## **🚀 Get Started**
 
-## 🛠️ Setup Instructions
-
-1. Clone the repo
-2. Run `npm install`
-3. Set up `.env` files
-4. Run with `npm run dev`
-
 ### **Clone the Repository**
 
 ```sh
@@ -73,6 +66,13 @@ cd scsms-backend
 git clone https://github.com/gniraj1432/scsms.git
 cd scsms
 ```
+
+## **Setup Instructions for Frontend**
+
+1. Clone the repo
+2. Run `npm install`
+3. Set up `.env` files
+4. Run with `npm run dev`
 
 ---
 
